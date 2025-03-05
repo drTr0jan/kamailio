@@ -93,7 +93,7 @@ static int sipt_get_generic_number_nai(
 static int sipt_get_generic_number(
 		struct sip_msg *msg, pv_param_t *param, pv_value_t *res);
 
-static int sipt_has_isup_body(struct sip_msg *msg, char *type, char *str2);
+static int sipt_has_isup_body(struct sip_msg *msg);
 
 /* New API */
 int sipt_parse_pv_name(pv_spec_p sp, str *in);
@@ -613,7 +613,7 @@ static int sipt_get_called_party(
 	return 0;
 }
 
-static int sipt_has_isup_body(struct sip_msg *msg, char *foo, char *bar)
+static int sipt_has_isup_body(struct sip_msg *msg)
 {
 	str body;
 	body.s = get_body_part(msg, TYPE_APPLICATION, SUBTYPE_ISUP, &body.len);
@@ -1054,6 +1054,13 @@ static int sipt_forwarding(struct sip_msg *msg, char *_fwdnumber, char *_nai)
 	return 1;
 }
 
+/**
+ *
+ */
+static int ksr_sipt_has_isup_body(sip_msg_t *msg)
+{
+	return sipt_has_isup_body(msg);
+}
 
 static int mod_init(void)
 {
@@ -1063,4 +1070,28 @@ static int mod_init(void)
 
 static void mod_destroy(void)
 {
+}
+
+/**
+ *
+ */
+/* clang-format off */
+static sr_kemi_t sr_kemi_sipt_exports[] = {
+	{ str_init("sipt"), str_init("has_isup_body"),
+		SR_KEMIP_BOOL, ksr_sipt_has_isup_body,
+		{ SR_KEMIP_NONE, SR_KEMIP_NONE, SR_KEMIP_NONE,
+			SR_KEMIP_NONE, SR_KEMIP_NONE, SR_KEMIP_NONE }
+	},
+
+	{ {0, 0}, {0, 0}, 0, NULL, { 0, 0, 0, 0, 0, 0 } }
+};
+/* clang-format on */
+
+/**
+ *
+ */
+int mod_register(char *path, int *dlflags, void *p1, void *p2)
+{
+	sr_kemi_modules_add(sr_kemi_sipt_exports);
+	return 0;
 }
