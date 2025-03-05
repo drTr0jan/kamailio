@@ -20,21 +20,22 @@
  *
  */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "../../core/sr_module.h"
 #include "../../core/parser/parse_param.h"
 #include "../../core/data_lump.h"
+#include "../../core/kemi.h"
 #include "../../core/mem/mem.h"
 #include "../../core/mod_fix.h"
 #include "../../core/parser/parse_content.h"
 #include "../../core/parser/parse_body.h"
 #include "../../core/parser/parser_f.h"
 #include "../../core/trim.h"
-#include "ss7.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
+#include "ss7.h"
 
 MODULE_VERSION
 
