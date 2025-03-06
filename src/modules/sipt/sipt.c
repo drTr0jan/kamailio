@@ -886,7 +886,10 @@ static int ki_set_bci_1(sip_msg_t *msg, str *_charge_indicator,
 		str *_called_status, str *_called_category, str *_e2e_indicator)
 {
 	return (sipt_set_bci_1(msg, _charge_indicator->s, _called_status->s,
-					_called_category->s, _e2e_indicator->s) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+					_called_category->s, _e2e_indicator->s)
+				   == 1)
+				   ? SR_KEMI_TRUE
+				   : SR_KEMI_FALSE;
 }
 
 static int sipt_destination(
@@ -900,10 +903,12 @@ static int sipt_destination(
 /**
  *
  */
-static int ki_destination(sip_msg_t *msg, str *_destination, str *_hops,
-		str *_nai)
+static int ki_destination(
+		sip_msg_t *msg, str *_destination, str *_hops, str *_nai)
 {
-	return (sipt_destination(msg, _destination->s, _hops->s, _nai->s) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+	return (sipt_destination(msg, _destination->s, _hops->s, _nai->s) == 1)
+				   ? SR_KEMI_TRUE
+				   : SR_KEMI_FALSE;
 }
 
 static int sipt_destination2(struct sip_msg *msg, char *_destination,
@@ -972,10 +977,13 @@ static int sipt_destination2(struct sip_msg *msg, char *_destination,
 }
 
 static int ki_destination_terminator(sip_msg_t *msg, str *_destination,
-		str *_hops, str *_nai,  str *_terminator)
+		str *_hops, str *_nai, str *_terminator)
 {
-	return (sipt_destination2(msg, _destination->s, _hops->s, _nai->s,
-					_terminator->s) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+	return (sipt_destination2(
+					msg, _destination->s, _hops->s, _nai->s, _terminator->s)
+				   == 1)
+				   ? SR_KEMI_TRUE
+				   : SR_KEMI_FALSE;
 }
 
 static int sipt_set_calling(struct sip_msg *msg, char *_origin, char *_nai,
@@ -1038,10 +1046,13 @@ static int sipt_set_calling(struct sip_msg *msg, char *_origin, char *_nai,
 /**
  *
  */
-static int ki_set_calling(sip_msg_t *msg, str *_origin, str *_nai, str *_pres,
-		str *_screen)
+static int ki_set_calling(
+		sip_msg_t *msg, str *_origin, str *_nai, str *_pres, str *_screen)
 {
-	return (sipt_set_calling(msg, _origin->s, _nai->s, _pres->s, _screen->s) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+	return (sipt_set_calling(msg, _origin->s, _nai->s, _pres->s, _screen->s)
+				   == 1)
+				   ? SR_KEMI_TRUE
+				   : SR_KEMI_FALSE;
 }
 
 static int sipt_forwarding(struct sip_msg *msg, char *_fwdnumber, char *_nai)
@@ -1102,7 +1113,8 @@ static int sipt_forwarding(struct sip_msg *msg, char *_fwdnumber, char *_nai)
  */
 static int ki_forwarding(sip_msg_t *msg, str *_fwdnumber, str *_nai)
 {
-	return (sipt_forwarding(msg, _fwdnumber->s, _nai->s) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+	return (sipt_forwarding(msg, _fwdnumber->s, _nai->s) == 1) ? SR_KEMI_TRUE
+															   : SR_KEMI_FALSE;
 }
 
 static int mod_init(void)
