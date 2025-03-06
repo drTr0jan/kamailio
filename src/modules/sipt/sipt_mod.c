@@ -620,6 +620,14 @@ static int sipt_has_isup_body(struct sip_msg *msg)
 	return (body.s == NULL) ? -1 : 1;
 }
 
+/**
+ *
+ */
+static int ki_has_isup_body(sip_msg_t *msg)
+{
+	return (sipt_has_isup_body(msg) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+}
+
 int sipt_parse_pv_name(pv_spec_p sp, str *in)
 {
 	sipt_pv_t *spv = NULL;
@@ -871,12 +879,29 @@ static int sipt_set_bci_1(struct sip_msg *msg, char *_charge_indicator,
 	return 1;
 }
 
+/**
+ *
+ */
+static int ki_set_bci_1(sip_msg_t *msg, char *_charge_indicator,
+		char *_called_status, char *_called_category, char *_e2e_indicator)
+{
+	return (sipt_set_bci_1(msg, _charge_indicator, _called_status, _called_category, _e2e_indicator) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+}
+
 static int sipt_destination(
 		struct sip_msg *msg, char *_destination, char *_hops, char *_nai)
 {
 	str terminator = str_init("1");
 	return sipt_destination2(
 			msg, _destination, _hops, _nai, (char *)&terminator);
+}
+
+/**
+ *
+ */
+static int ki_destination(sip_msg_t *msg, char *_destination, char *_hops, char *_nai)
+{
+	return (sipt_destination(msg, _destination, _hops, _nai) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
 }
 
 static int sipt_destination2(struct sip_msg *msg, char *_destination,
@@ -944,6 +969,11 @@ static int sipt_destination2(struct sip_msg *msg, char *_destination,
 	return 1;
 }
 
+static int ki_destination_terminator(sip_msg_t *msg, char *_destination, char *_hops, char *_nai,  char *_terminator)
+{
+	return (sipt_destination2(msg, _destination, _hops, _nai, _terminator) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
+}
+
 static int sipt_set_calling(struct sip_msg *msg, char *_origin, char *_nai,
 		char *_pres, char *_screen)
 {
@@ -999,6 +1029,15 @@ static int sipt_set_calling(struct sip_msg *msg, char *_origin, char *_nai,
 	}
 
 	return 1;
+}
+
+/**
+ *
+ */
+static int ki_set_calling(sip_msg_t *msg, char *_origin, char *_nai,
+		char *_pres, char *_screen)
+{
+	return (sipt_set_calling(msg, _origin, _nai, _pres, _screen) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
 }
 
 static int sipt_forwarding(struct sip_msg *msg, char *_fwdnumber, char *_nai)
@@ -1057,9 +1096,9 @@ static int sipt_forwarding(struct sip_msg *msg, char *_fwdnumber, char *_nai)
 /**
  *
  */
-static int ksr_sipt_has_isup_body(sip_msg_t *msg)
+static int ki_forwarding(sip_msg_t *msg, char *_fwdnumber, char *_nai)
 {
-	return sipt_has_isup_body(msg);
+	return (sipt_forwarding(msg, _fwdnumber, _nai) == 1) ? SR_KEMI_TRUE : SR_KEMI_FALSE;
 }
 
 static int mod_init(void)
@@ -1077,11 +1116,24 @@ static void mod_destroy(void)
  */
 /* clang-format off */
 static sr_kemi_t sr_kemi_sipt_exports[] = {
-	{ str_init("sipt"), str_init("has_isup_body"),
-		SR_KEMIP_BOOL, ksr_sipt_has_isup_body,
-		{ SR_KEMIP_NONE, SR_KEMIP_NONE, SR_KEMIP_NONE,
-			SR_KEMIP_NONE, SR_KEMIP_NONE, SR_KEMIP_NONE }
-	},
+		{ str_init("sipt"), str_init("destination"), SR_KEMIP_BOOL, ki_destination,
+				{ SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_NONE,
+						SR_KEMIP_NONE, SR_KEMIP_NONE }},
+		{ str_init("sipt"), str_init("destination_terminator"), SR_KEMIP_BOOL, ki_destination_terminator,
+				{ SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_STR,
+						SR_KEMIP_NONE, SR_KEMIP_NONE }},
+{ str_init("sipt"), str_init("forwarding"), SR_KEMIP_BOOL, ki_forwarding,
+		{ SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_NONE, SR_KEMIP_NONE,
+				SR_KEMIP_NONE, SR_KEMIP_NONE }},
+{ str_init("sipt"), str_init("has_isup_body"), SR_KEMIP_BOOL, ki_has_isup_body,
+	{ SR_KEMIP_NONE, SR_KEMIP_NONE, SR_KEMIP_NONE, SR_KEMIP_NONE,
+SR_KEMIP_NONE, SR_KEMIP_NONE }},
+{ str_init("sipt"), str_init("set_bci_1"), SR_KEMIP_BOOL, ki_set_bci_1,
+	{ SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_STR,
+SR_KEMIP_NONE, SR_KEMIP_NONE }},
+{ str_init("sipt"), str_init("set_calling"), SR_KEMIP_BOOL, ki_set_calling,
+	{ SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_STR, SR_KEMIP_STR,
+SR_KEMIP_NONE, SR_KEMIP_NONE }},
 
 	{ {0, 0}, {0, 0}, 0, NULL, { 0, 0, 0, 0, 0, 0 } }
 };
